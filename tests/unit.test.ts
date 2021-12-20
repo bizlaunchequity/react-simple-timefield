@@ -32,56 +32,56 @@ describe('#validateTimeAndCursor()', () => {
   const DF = '00:00:00';
 
   test('should return an array', () => {
-    const res = validateTimeAndCursor(true, '', DF, ':', 0);
+    const res = validateTimeAndCursor({ showSeconds: true, value: '', defaultValue: DF, colon: ':', cursorPosition: 0 });
     expect(res).toBeInstanceOf(Array);
     expect(res).toHaveLength(2);
     expect(res).toEqual([DF, 0]);
   });
 
   test('should handle "showSeconds" option', () => {
-    expect(validateTimeAndCursor(true, '12:34:56', DF)[0]).toEqual('12:34:56');
-    expect(validateTimeAndCursor(true, '12:34', DF)[0]).toEqual('12:34:00');
-    expect(validateTimeAndCursor(false, '12:34:56', DF)[0]).toEqual('12:34');
-    expect(validateTimeAndCursor(false, '12:34', DF)[0]).toEqual('12:34');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12:34:56', defaultValue: DF })[0]).toEqual('12:34:56');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12:34', defaultValue: DF })[0]).toEqual('12:34:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:34:56', defaultValue: DF })[0]).toEqual('12:34');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:34', defaultValue: DF })[0]).toEqual('12:34');
   });
 
   test('should handle "colon" option', () => {
-    expect(validateTimeAndCursor(true, '12-34-56', DF, '-')[0]).toEqual('12-34-56');
-    expect(validateTimeAndCursor(true, '12-34', DF, '-')[0]).toEqual('12-34-00');
-    expect(validateTimeAndCursor(false, '12-34-56', DF, '-')[0]).toEqual('12-34');
-    expect(validateTimeAndCursor(false, '12-34', DF, '-')[0]).toEqual('12-34');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12-34-56', defaultValue: DF, colon: '-' })[0]).toEqual('12-34-56');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12-34', defaultValue: DF, colon: '-' })[0]).toEqual('12-34-00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12-34-56', defaultValue: DF, colon: '-' })[0]).toEqual('12-34');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12-34', defaultValue: DF, colon: '-' })[0]).toEqual('12-34');
   });
 
   test('should return default value if bad format of hours', () => {
-    expect(validateTimeAndCursor(false, '30:00', DF)[0]).toEqual('00:00');
-    expect(validateTimeAndCursor(false, ':', DF)[0]).toEqual('00:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '30:00', defaultValue: DF, limitHours: true })[0]).toEqual('00:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: ':', defaultValue: DF })[0]).toEqual('00:00');
 
-    expect(validateTimeAndCursor(true, '30:00', DF)[0]).toEqual('00:00:00');
-    expect(validateTimeAndCursor(true, ':', DF)[0]).toEqual('00:00:00');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '30:00', defaultValue: DF, limitHours: true })[0]).toEqual('00:00:00');
+    expect(validateTimeAndCursor({ showSeconds: true, value: ':', defaultValue: DF })[0]).toEqual('00:00:00');
   });
 
   test('should validate hours', () => {
-    expect(validateTimeAndCursor(false, '00:00', DF)[0]).toEqual('00:00');
-    expect(validateTimeAndCursor(false, '12:00', DF)[0]).toEqual('12:00');
-    expect(validateTimeAndCursor(false, '23:00', DF)[0]).toEqual('23:00');
-    expect(validateTimeAndCursor(false, '24:00', DF)[0]).toEqual('23:00');
-    expect(validateTimeAndCursor(false, '1:00', DF)[0]).toEqual('10:00');
-    expect(validateTimeAndCursor(false, '24:00', '21:00')[0]).toEqual('21:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '00:00', defaultValue: DF })[0]).toEqual('00:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:00', defaultValue: DF })[0]).toEqual('12:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '23:00', defaultValue: DF })[0]).toEqual('23:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '24:00', defaultValue: DF, limitHours: true })[0]).toEqual('23:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '1:00', defaultValue: DF })[0]).toEqual('10:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '24:00', defaultValue: '21:00', limitHours: true })[0]).toEqual('21:00');
   });
 
   test('should validate minutes', () => {
-    expect(validateTimeAndCursor(false, '12:00', DF)[0]).toEqual('12:00');
-    expect(validateTimeAndCursor(false, '12:30', DF)[0]).toEqual('12:30');
-    expect(validateTimeAndCursor(false, '12:59', DF)[0]).toEqual('12:59');
-    expect(validateTimeAndCursor(false, '12:60', DF)[0]).toEqual('12:00');
-    expect(validateTimeAndCursor(false, '12:1', DF)[0]).toEqual('12:10');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:00', defaultValue: DF })[0]).toEqual('12:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:30', defaultValue: DF })[0]).toEqual('12:30');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:59', defaultValue: DF })[0]).toEqual('12:59');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:60', defaultValue: DF })[0]).toEqual('12:00');
+    expect(validateTimeAndCursor({ showSeconds: false, value: '12:1', defaultValue: DF })[0]).toEqual('12:10');
   });
 
   test('should validate seconds', () => {
-    expect(validateTimeAndCursor(true, '12:00:00', DF)[0]).toEqual('12:00:00');
-    expect(validateTimeAndCursor(true, '12:00:30', DF)[0]).toEqual('12:00:30');
-    expect(validateTimeAndCursor(true, '12:00:59', DF)[0]).toEqual('12:00:59');
-    expect(validateTimeAndCursor(true, '12:00:60', DF)[0]).toEqual('12:00:00');
-    expect(validateTimeAndCursor(true, '12:00:1', DF)[0]).toEqual('12:00:10');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12:00:00', defaultValue: DF })[0]).toEqual('12:00:00');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12:00:30', defaultValue: DF })[0]).toEqual('12:00:30');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12:00:59', defaultValue: DF })[0]).toEqual('12:00:59');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12:00:60', defaultValue: DF })[0]).toEqual('12:00:00');
+    expect(validateTimeAndCursor({ showSeconds: true, value: '12:00:1', defaultValue: DF })[0]).toEqual('12:00:10');
   });
 });

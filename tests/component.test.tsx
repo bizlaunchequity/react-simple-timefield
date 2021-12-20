@@ -13,8 +13,8 @@ describe('Component', () => {
     persist = jest.fn();
     onChangeA = jest.fn();
     onChangeB = jest.fn();
-    a = mount(<TimeField value={'12:34'} onChange={onChangeA} />);
-    b = mount(<TimeField value={'12:34:56'} onChange={onChangeB} showSeconds />);
+    a = mount(<TimeField value={'12:34'} onChange={onChangeA} limitHours/>);
+    b = mount(<TimeField value={'12:34:56'} onChange={onChangeB} limitHours showSeconds />);
   });
 
   afterEach(() => {
