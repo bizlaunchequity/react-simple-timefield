@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc && cd ./demo && npm run build && cd -",
     "test": "jest",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern docs -- .",
+    "lint": "eslint --ignore-path .gitignore --ignore-pattern docs --ignore-pattern dist -- .",
     "prettier": "prettier --ignore-path .gitignore --write './**/*.js'",
     "typecheck": "tsc",
     "format": "npm run prettier && npm run lint",
