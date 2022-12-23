@@ -40,8 +40,8 @@
   },
   "peerDependencies": {
     "prop-types": "^15",
-    "react": "^16.0.0 || ^17",
-    "react-dom": "^16.0.0 || ^17"
+    "react": "^16.0.0 || ^17 || ^18",
+    "react-dom": "^16.0.0 || ^17 || ^18"
   },
   "devDependencies": {
     "@types/enzyme": "3.10.4",
